@@ -13,7 +13,8 @@ public:
 	virtual void onExit(const Controller&);
 	virtual void onFrame(const Controller&);
 
-	void setupFingers(const FingerList fingers, const Hand& hand);
+	void setupFingers(const FingerList& fingers, const Hand& hand);
+	bool isFingerLengthZero(Finger finger);
 	Finger GetrThumb();
 	Finger GetrPointer();
 	Finger GetrMiddle();
@@ -24,6 +25,8 @@ public:
 	Finger GetlMiddle();
 	Finger GetlIndex();
 	Finger GetlPinkie();
+	FingerList CompareFinger(const FingerList& fingers, const Hand& hand);
+private:
 	Finger rThumb;
 	Finger rPointer;
 	Finger rMiddle;

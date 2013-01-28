@@ -49,7 +49,58 @@ Finger myFingers::GetlPinkie() {
 	return lPinkie;
 }
 
-void myFingers::setupFingers(const FingerList fingers, const Hand& hand) {
+FingerList myFingers::CompareFinger(const FingerList& fingers, const Hand& hand){
+	for(int i = 0; i < fingers.count(); i++)
+	{
+		if( hand.fingers()[i].length() == rThumb.length())
+		{
+			std::cout << " you are attempting to use your right thumb " << std::endl;
+		}
+		if( hand.fingers()[i].length() == lThumb.length())
+		{
+			std::cout << " you are attempting to use your Left thumb " << std::endl;
+		}
+
+		if( hand.fingers()[i].length() == rPointer.length())
+		{
+			std::cout << " you are attempting to use your right Pointer " << std::endl;
+		}
+		if( hand.fingers()[i].length() == lPointer.length())
+		{
+			std::cout << " you are attempting to use your left Pointer " << std::endl;
+		}
+
+		if( hand.fingers()[i].length() == rMiddle.length())
+		{
+			std::cout << " you are attempting to use your right Middle " << std::endl;
+		}
+		if( hand.fingers()[i].length() == lMiddle.length())
+		{
+			std::cout << " you are attempting to use your left Middle " << std::endl;
+		}
+
+		if( hand.fingers()[i].length() == rIndex.length())
+		{
+			std::cout << " you are attempting to use your right Index " << std::endl;
+		}
+		if( hand.fingers()[i].length() == lIndex.length())
+		{
+			std::cout << " you are attempting to use your left Index " << std::endl;
+		}
+
+		if( hand.fingers()[i].length() == rPinkie.length())
+		{
+			std::cout << " you are attempting to use your right Pinkie " << std::endl;
+		}
+		if( hand.fingers()[i].length() == lPinkie.length())
+		{
+			std::cout << " you are attempting to use your left Pinkie " << std::endl;
+		}
+	}
+	return fingers;
+}
+
+void myFingers::setupFingers(const FingerList& fingers, const Hand& hand) {
 	float vArray[9];
 	for(int f = 0; f < fingers.count();f++)
 	{
@@ -76,9 +127,9 @@ void myFingers::setupFingers(const FingerList fingers, const Hand& hand) {
 		if( rPinkie.length() != 0 && rIndex.length() != 0 && rMiddle.length() != 0 && rPointer.length() != 0 && rThumb.length() != 0 && 
 			lPinkie.length() != 0 && lIndex.length() != 0 && lMiddle.length() != 0 && lPointer.length() != 0 &&  lThumb.length()  != 0 )
 		{
-			// I dont want anything to be zero so I am using this to test and display when nothing is zero . 
-			std::cout << " lPinkie Length " << lPinkie.length() <<  " lIndex Length " << lIndex.length() <<  " lMiddle Length " << lMiddle.length() <<  " lPointer Length " << lPointer.length() <<  " lThumb Length " << lThumb.length() << std::endl;
-			std::cout << " rThumb Length " << rThumb.length() <<  " rPointer Length " << rPointer.length() <<  " rMiddle Length " << rMiddle.length() <<  " rIndex Length " << rIndex.length() <<  " rPinkie Length " << rPinkie.length() << std::endl;
+			// I dont want anything to be zero so I am using this for testing purposes to display lengths . 
+			 std::cout << " lPinkie Length " << lPinkie.length() <<  " lIndex Length " << lIndex.length() <<  " lMiddle Length " << lMiddle.length() <<  " lPointer Length " << lPointer.length() <<  " lThumb Length " << lThumb.length() << std::endl;
+			 std::cout << " rThumb Length " << rThumb.length() <<  " rPointer Length " << rPointer.length() <<  " rMiddle Length " << rMiddle.length() <<  " rIndex Length " << rIndex.length() <<  " rPinkie Length " << rPinkie.length() << std::endl;
 			SetupComplete = true;
 		}
 	}
@@ -101,18 +152,36 @@ void myFingers::onExit(const Controller& controller) {
 	std::cout << "Exited" << std::endl;
 }
 
+bool myFingers::isFingerLengthZero(Finger finger){
+	bool lengthisZero;
+	if(finger.length() == 0)
+	{
+		lengthisZero = true;
+	} else {
+		lengthisZero = false;
+	}
+	return lengthisZero;
+}
+
 void myFingers::onFrame(const Controller& controller) {
 	const Frame frame = controller.frame();
 	const Hand hand = frame.hands()[0];
 	myFingers myFingers;
-	if (!frame.hands().empty()) {
+	if (!frame.hands().empty()) 
+	{
 		const FingerList fingers = hand.fingers();
-		if ( !fingers.empty() ) {	
-			myFingers.setupFingers(fingers,hand);
+		FingerList detectedfingers;
+		if ( !fingers.empty() )
+		{	
+		myFingers.setupFingers(fingers,hand);
+		if(isFingerLengthZero(rThumb) || !isFingerLengthZero(rPointer) && !isFingerLengthZero(rMiddle) && !isFingerLengthZero(rIndex) && !isFingerLengthZero(rPinkie)){
 			std::cout << "Left Hand Fingers  :  " << myFingers.lThumb.length() <<  " " << myFingers.lPointer.length() << " " << myFingers.lMiddle.length() << " " << myFingers.lIndex.length() << " " <<  myFingers.lPinkie.length() <<  std::endl;
-			std::cout << "Right Hand Fingers :  " << myFingers.rThumb.length() << " " << myFingers.rPointer.length() << " " <<  myFingers.rMiddle.length() << " " << myFingers.rIndex.length() << " " <<  myFingers.rPinkie.length() <<  std::endl;
-
 		}
-	}		
-	// Now you can use fingers to your fingers.
-}
+		if(isFingerLengthZero(lThumb)  || !isFingerLengthZero(lPointer) && !isFingerLengthZero(lMiddle) && !isFingerLengthZero(lIndex) && !isFingerLengthZero(lPinkie)){
+
+			std::cout << "Right Hand Fingers :  " << myFingers.rThumb.length() << " " << myFingers.rPointer.length() << " " <<  myFingers.rMiddle.length() << " " << myFingers.rIndex.length() << " " <<  myFingers.rPinkie.length() <<  std::endl;
+		}
+		detectedfingers = CompareFinger(fingers,hand);
+		}
+	}
+}		
