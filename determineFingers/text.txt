@@ -1,0 +1,5 @@
+Pinkie: 75.7273
+Thumb: 30.3554
+Index: 75.7273
+Pointer: 75.7273
+Middle: 0
