@@ -19,6 +19,18 @@ public:
 	virtual void onDisconnect(const Controller&);
 	virtual void onExit(const Controller&);
 	virtual void onFrame(const Controller&);
+	virtual void setupFingers(const FingerList fingers,const Hand& hand);
+	bool SetupComplete;
+	Finger GetrThumb();
+	Finger GetrPointer();
+	Finger GetrMiddle();
+	Finger GetrIndex();
+	Finger GetrPinkie();
+	Finger GetlThumb();
+	Finger GetlPointer();
+	Finger GetlMiddle();
+	Finger GetlIndex();
+	Finger GetlPinkie();
 	Finger rThumb;
 	Finger rPointer;
 	Finger rMiddle;
@@ -32,6 +44,7 @@ public:
 };
 
 void SampleListener::onInit(const Controller& controller) {
+
 	std::cout << "Initialized" << std::endl;
 }
 
@@ -47,58 +60,94 @@ void SampleListener::onExit(const Controller& controller) {
 	std::cout << "Exited" << std::endl;
 }
 
-void SampleListener::onFrame(const Controller& controller) {
-	const Frame frame = controller.frame();
+void SampleListener::setupFingers(const FingerList fingers, const Hand& hand) {
 	float vArray[9];
-	if (!frame.hands().empty()) {
-		const Hand hand = frame.hands()[0];
-		const Tool tool = frame.tools()[0];
-		const FingerList fingers = hand.fingers();
-		const ToolList tools = hand.tools();
+	for(int f = 0; f < fingers.count();f++)
+	{
+		vArray[f] = hand.fingers()[f].tipPosition().x;
+	}
 
-		if(!tools.empty())
+	if(vArray[0] != 0 && vArray[1] != 0 && vArray[2] != 0 && vArray[3] != 0 && vArray[4] != 0 &&
+		vArray[5] != 0 && vArray[6] != 0 && vArray[7] != 0 && vArray[8] != 0 && vArray[9] != 0)
+	{
+		std::sort(std::begin(vArray), std::end(vArray));
+		for(int f = 0; f < fingers.count(); f++)
 		{
-			std::cout << "Tool Length " << tool.length() << std::endl;
+			if(vArray[0] ==hand.fingers()[f].tipPosition().x){lPinkie = hand.fingers()[f];}
+			if(vArray[1] ==hand.fingers()[f].tipPosition().x){lIndex = hand.fingers()[f];}
+			if(vArray[2] ==hand.fingers()[f].tipPosition().x){lMiddle = hand.fingers()[f];}
+			if(vArray[3] ==hand.fingers()[f].tipPosition().x){lPointer = hand.fingers()[f];}
+			if(vArray[4] ==hand.fingers()[f].tipPosition().x){lThumb = hand.fingers()[f];}
+			if(vArray[5] ==hand.fingers()[f].tipPosition().x){rThumb = hand.fingers()[f];}
+			if(vArray[6] ==hand.fingers()[f].tipPosition().x){rPointer = hand.fingers()[f];}
+			if(vArray[7] ==hand.fingers()[f].tipPosition().x){rMiddle = hand.fingers()[f];}
+			if(vArray[8] ==hand.fingers()[f].tipPosition().x){rIndex = hand.fingers()[f];}
+			if(vArray[9] ==hand.fingers()[f].tipPosition().x){rPinkie = hand.fingers()[f];}
 		}
-
-
-		if (!fingers.empty()) {	
-
-			for(int f = 0; f < fingers.count();f++)
-			{
-				vArray[f] = hand.fingers()[f].tipPosition().x;
-			}
-
-			if(vArray[0] != 0 && vArray[1] != 0 && vArray[2] != 0 && vArray[3] != 0 && vArray[4] != 0 &&
-			   vArray[5] != 0 && vArray[6] != 0 && vArray[7] != 0 && vArray[8] != 0 && vArray[9] != 0)
-			{
-				std::sort(std::begin(vArray), std::end(vArray));
-				for(int f = 0; f < fingers.count(); f++)
-				{
-					if(vArray[0] ==hand.fingers()[f].tipPosition().x){lPinkie = hand.fingers()[f];}
-					if(vArray[1] ==hand.fingers()[f].tipPosition().x){lIndex = hand.fingers()[f];}
-					if(vArray[2] ==hand.fingers()[f].tipPosition().x){lMiddle = hand.fingers()[f];}
-					if(vArray[3] ==hand.fingers()[f].tipPosition().x){lPointer = hand.fingers()[f];}
-					if(vArray[4] ==hand.fingers()[f].tipPosition().x){lThumb = hand.fingers()[f];}
-					if(vArray[5] ==hand.fingers()[f].tipPosition().x){rThumb = hand.fingers()[f];}
-					if(vArray[6] ==hand.fingers()[f].tipPosition().x){rPointer = hand.fingers()[f];}
-					if(vArray[7] ==hand.fingers()[f].tipPosition().x){rMiddle = hand.fingers()[f];}
-					if(vArray[8] ==hand.fingers()[f].tipPosition().x){rIndex = hand.fingers()[f];}
-					if(vArray[9] ==hand.fingers()[f].tipPosition().x){rPinkie = hand.fingers()[f];}
-
-
-				}
-				if( rPinkie.length() != 0 && rIndex.length() != 0 && rMiddle.length() != 0 && rPointer.length() != 0 && rThumb.length() != 0 && 
-					lPinkie.length() != 0 && lIndex.length() != 0 && lMiddle.length() != 0 && lPointer.length() != 0 &&  lThumb.length()  != 0 )
-				{
-				// I dont want anything to be zero so I am using this to test and display when nothing is zero . 
-				std::cout << " lPinkie Length " << lPinkie.length() <<  " lIndex Length " << lIndex.length() <<  " lMiddle Length " << lMiddle.length() <<  " lPointer Length " << lPointer.length() <<  " lThumb Length " << lThumb.length() << std::endl;
-				std::cout << " rThumb Length " << rThumb.length() <<  " rPointer Length " << rPointer.length() <<  " rMiddle Length " << rMiddle.length() <<  " rIndex Length " << rIndex.length() <<  " rPinkie Length " << rPinkie.length() << std::endl;
-				}
-
-			}
+		if( rPinkie.length() != 0 && rIndex.length() != 0 && rMiddle.length() != 0 && rPointer.length() != 0 && rThumb.length() != 0 && 
+			lPinkie.length() != 0 && lIndex.length() != 0 && lMiddle.length() != 0 && lPointer.length() != 0 &&  lThumb.length()  != 0 )
+		{
+			// I dont want anything to be zero so I am using this to test and display when nothing is zero . 
+			std::cout << " lPinkie Length " << lPinkie.length() <<  " lIndex Length " << lIndex.length() <<  " lMiddle Length " << lMiddle.length() <<  " lPointer Length " << lPointer.length() <<  " lThumb Length " << lThumb.length() << std::endl;
+			std::cout << " rThumb Length " << rThumb.length() <<  " rPointer Length " << rPointer.length() <<  " rMiddle Length " << rMiddle.length() <<  " rIndex Length " << rIndex.length() <<  " rPinkie Length " << rPinkie.length() << std::endl;
+			SetupComplete = true;
 		}
 	}
+}
+
+Finger SampleListener::GetrThumb() {
+	return rThumb;
+}
+
+Finger SampleListener::GetlThumb() {
+	return rThumb;
+}
+
+Finger SampleListener::GetrPointer() {
+	return rPointer;
+}
+
+Finger SampleListener::GetlPointer() {
+	return lPointer;
+}
+
+Finger SampleListener::GetrMiddle() {
+	return rMiddle;
+}
+
+Finger SampleListener::GetlMiddle() {
+	return lMiddle;
+}
+
+Finger SampleListener::GetrIndex() {
+	return rIndex;
+}
+
+Finger SampleListener::GetlIndex() {
+	return lIndex;
+}  
+
+Finger SampleListener::GetrPinkie() {
+	return rPinkie;
+}
+
+Finger SampleListener::GetlPinkie() {
+	return lPinkie;
+}
+
+void SampleListener::onFrame(const Controller& controller) {
+	const Frame frame = controller.frame();
+	const Hand hand = frame.hands()[0];
+	if (!frame.hands().empty()) {
+		const FingerList fingers = hand.fingers();
+		if ( !fingers.empty() ) {	
+			setupFingers(fingers,hand);
+			std::cout << "Left Hand Fingers  :  " << lThumb.length() <<  " " << lPointer.length() << " " << lMiddle.length() << " " << lIndex.length() << " " <<  lPinkie.length() <<  std::endl;
+			std::cout << "Right Hand Fingers :  " << rThumb.length() << " " << rPointer.length() << " " <<  rMiddle.length() << " " << rIndex.length() << " " <<   rPinkie.length() <<  std::endl;
+
+		}
+	}		
+	// Now you can use fingers to your fingers.
 }
 
 int main() {
