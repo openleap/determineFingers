@@ -49,7 +49,7 @@ Finger myFingers::GetlPinkie() {
 	return lPinkie;
 }
 
-//void myFingers::setupFingers(const FingerList& fingers,const Frame& frame, const Hand& hand1, const Hand& hand2,const int count) {
+
 void myFingers::setupFingers(const FingerList& fingers, const Frame& frame) {
 	float vArray[10];
 	int f  = 0;
@@ -92,13 +92,13 @@ void myFingers::onExit(const Controller& controller) {
 }
 
 bool myFingers::isLengthsZero(const FingerList& fingers,const Frame& frame) {
-	bool check = true;
+	bool check = false;
 	int f = 0;
 	for(f; f < 9; f++)
 	{
 		if(frame.fingers()[f].length() ==0)
 		{
-			check = false;
+			check = true;
 		}
 	}
 	return check;
@@ -106,39 +106,22 @@ bool myFingers::isLengthsZero(const FingerList& fingers,const Frame& frame) {
 
 void myFingers::onFrame(const Controller& controller) {
 	const Frame frame = controller.frame();
-	//const Hand hand1 = frame.hands()[0];
-	//const Hand hand2 = frame.hands()[1];
 	const HandList hands = frame.hands();
 	if (!frame.hands().empty()) 
 	{
 		const FingerList fingers;
-		frame.fingers()[0] = frame.fingers()[0];
-		frame.fingers()[1] = frame.fingers()[1];
-		frame.fingers()[2] = frame.fingers()[2];
-		frame.fingers()[3] = frame.fingers()[3];
-		frame.fingers()[4] = frame.fingers()[4];
-		frame.fingers()[5] = frame.fingers()[5];
-		frame.fingers()[6] = frame.fingers()[6];
-		frame.fingers()[7] = frame.fingers()[7];
-		frame.fingers()[8] = frame.fingers()[8];
-		frame.fingers()[9] = frame.fingers()[9];
-
-		/*frame.fingers()[0] = hand1.fingers()[0];
-		frame.fingers()[1] = hand1.fingers()[1];
-		frame.fingers()[2] = hand1.fingers()[2];
-		frame.fingers()[3] = hand1.fingers()[3];
-		frame.fingers()[4] = hand1.fingers()[4];
-		frame.fingers()[0] = hand2.fingers()[0];
-		frame.fingers()[1] = hand2.fingers()[1];
-		frame.fingers()[2] = hand2.fingers()[2];
-		frame.fingers()[3] = hand2.fingers()[3];
-		frame.fingers()[4] = hand2.fingers()[4];*/
-		// setupFingers(fingers,frame,hand1,hand2,count);
-		setupFingers(fingers,frame);
-		if(isLengthsZero(fingers,frame))
+		for(int f=0; f < 9; f++)
 		{
-		std::cout << "Left Hand Fingers  :  " << lThumb.length() <<  " " << lPointer.length() << " " << lMiddle.length() << " " << lIndex.length() << " " <<  lPinkie.length() <<  std::endl;
-		std::cout << "Right Hand Fingers :  " << rThumb.length() << " " << rPointer.length() << " " <<  rMiddle.length() << " " << rIndex.length() << " " <<  rPinkie.length() <<  std::endl;
+			frame.fingers()[f] = frame.fingers()[f];
+		}
+
+		setupFingers(fingers,frame);
+
+		if(!isLengthsZero(fingers,frame))
+		{
+			std::cout << "Left Hand Fingers  :  " << lThumb.length() <<  " " << lPointer.length() << " " << lMiddle.length() << " " << lIndex.length() << " " <<  lPinkie.length() <<  std::endl;
+			std::cout << "Right Hand Fingers :  " << rThumb.length() << " " << rPointer.length() << " " <<  rMiddle.length() << " " << rIndex.length() << " " <<  rPinkie.length() <<  std::endl;
+			SetupComplete = true;
 		}
 	}
 }		
