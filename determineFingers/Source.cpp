@@ -7,7 +7,7 @@ int main() {
 	// Create a sample listener and controller
 	myFingers listener;
 	Controller controller;
-
+	listener.SetupComplete = false;
 	// Have the sample listener receive events from the controller
 	controller.addListener(listener);
 
