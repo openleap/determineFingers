@@ -856,15 +856,16 @@ class ScreenList : public Interface {
 /// characteristics include the bottom-left corner position of the screen,
 /// direction vectors for the horizontal and vertical axes of the screen, and
 /// the screen's normal vector. The screen must be properly registered with the 
-/// Screen Locator tool for the Leap to report these characteristics accurately. 
+/// Screen Locator for the Leap to report these characteristics accurately. 
 /// The Screen class also reports the size of the screen in pixels, using 
-/// information obtained from the operating system.
+/// information obtained from the operating system. (Run the Screen Locator 
+/// from the Leap Application Settings dialog, on the Screen page.)
 ///
 /// You can get the point of intersection between the screen and a ray
 /// projected from a Pointable object using the Screen::intersect() function.
 /// Likewise, you can get the closest point on the screen to a point in space
 /// using the Screen::distanceToPoint() function. Again, the screen location 
-/// must be registered with the Screen Locator tool for these functions to 
+/// must be registered with the Screen Locator for these functions to 
 /// return accurate values.
 ///
 /// Note that Screen objects can be invalid, which means that they do not contain
@@ -884,7 +885,7 @@ class Screen : public Interface {
     LEAP_EXPORT Screen();
 
     /// A unique identifier for this screen based on the screen 
-    /// information in the configuration. A default screen with ID, *Screen 0*,
+    /// information in the configuration. A default screen with ID, *0*,
     /// always exists and contains default characteristics, even if no screens
     /// have been located.
     LEAP_EXPORT int32_t id() const;
@@ -1522,15 +1523,15 @@ class Controller : public Interface {
     /// configuration information. Reserved for future use.
     LEAP_EXPORT Config config() const;
 
-    /// The list of screens position have been identified by using the
-    /// Screen locator tool.
+    /// The list of screens whose positions have been identified by using the
+    /// Leap application Screen Locator.
     ///
     /// The list always contains at least one entry representing the default
     /// screen. If the user has not registered the location of this default 
     /// screen, then the coordinates, directions, and other values reported by 
     /// the functions in its Screen object will not be accurate. Other monitor 
     /// screens only appear in the list if their positions have been registered
-    /// using the Screen Locator tool.
+    /// using the Leap Screen Locator.
     ///
     /// A Screen object represents the position and orientation of a display
     /// monitor screen within the Leap coordinate system.
@@ -1549,7 +1550,7 @@ class Controller : public Interface {
     /// been registered by the user using the Screen Locator tool.
     /// The list always contains at least one entry representing the default
     /// monitor. If the user has not run the Screen Locator or has moved the Leap
-    /// device or screen since runiiing it, the Screen object for this entry
+    /// device or screen since running it, the Screen object for this entry
     /// only contains default values.
     LEAP_EXPORT ScreenList calibratedScreens() const;
 };
